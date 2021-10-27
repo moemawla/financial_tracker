@@ -20,7 +20,7 @@ The Trello board for managing the implementation of the application is found her
 
     1- Make sure you have Python3, pip3 and virtualenv installed.
     2- Clone the project from the Git repository (git clone https://github.com/moemawla/financial_tracker.git)
-    3- Go into the project folder (cd Financial-Tracker)
-    4- Create the virtual environment (virtualenv appvenv)
-    5- Activate the virtual environment (source appvenv/bin/activate)
+    3- Go into the project folder (cd financial_tracker)
+    4- Create the virtual environment (virtualenv venv)
+    5- Activate the virtual environment (source venv/bin/activate)
     6- Install the project requirements inside the the virtual environment (pip3 install -r requirements.txt)
