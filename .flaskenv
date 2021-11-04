@@ -1,2 +1,2 @@
-FLASK_APP=financial_tracker
+FLASK_APP=financial_tracker/main:create_app
 FLASK_ENV=development
