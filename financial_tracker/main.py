@@ -15,6 +15,9 @@ def create_app():
     db.init_app(app)
     ma.init_app(app)
 
+    from commands import db_commands
+    app.register_blueprint(db_commands)
+
     # Then we can register our routes!
     from controllers import registerable_controllers
     for controller in registerable_controllers:
