@@ -18,11 +18,10 @@ class TestCourses(unittest.TestCase):
     def test_transaction_index(self):
         # we use the client to make a request
         response = self.client.get("/transactions/")
-        data = response.get_json()
         
         # Now we can perform tests on the response
         self.assertEqual(response.status_code, 200)
-        self.assertIsInstance(data, list)
+        self.assertIn(b'<h1>Transaction Index</h1>', response.data)
 
     def test_create_bad_transaction(self):
         response = self.client.post("/transactions/", json={"transaction_name": ""})
