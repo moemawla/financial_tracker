@@ -1,10 +1,12 @@
 from flask import Flask, jsonify
+from flask_login import LoginManager
 from flask_marshmallow import Marshmallow
 from flask_sqlalchemy import SQLAlchemy
 from marshmallow.exceptions import ValidationError
 
 db = SQLAlchemy()
 ma = Marshmallow()
+lm = LoginManager()
 
 def create_app():
     # Creating the flask app object - this is the core of our app!
@@ -15,6 +17,7 @@ def create_app():
 
     db.init_app(app)
     ma.init_app(app)
+    lm.init_app(app)
 
     from commands import db_commands
     app.register_blueprint(db_commands)
