@@ -1,4 +1,4 @@
-from flask import Blueprint, request, render_template, redirect, url_for, current_app, jsonify
+from flask import Blueprint, request, render_template, redirect, url_for, current_app
 from main import db
 from models.transactions import Transaction
 from schemas.transaction_schema import transactions_schema, transaction_schema

@@ -14,8 +14,5 @@ def update_image(id):
             return abort(400, description="Invalid file type")
         bucket = boto3.resource("s3").Bucket(current_app.config["AWS_S3_BUCKET"])
         bucket.upload_fileobj(image, transaction.image_filename)
-
-        # note that we have removed this line:
-        # image.save(f"static/{course.image_filename}")
         return redirect(url_for("transactions.get_transaction", id = id))
     return abort(400, description="No image")

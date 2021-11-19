@@ -1,6 +1,6 @@
 import os
 
-#1MB for file size uploads
+# 1MB for file size uploads
 MAX_CONTENT_LENGTH = 1 * 1024 * 1024
 class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS=False
