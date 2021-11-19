@@ -7,3 +7,7 @@ class Transaction(db.Model):
     
     def __init__(self, transaction_name):
         self.transaction_name = transaction_name
+
+    @property
+    def image_filename(self):
+        return f"transaction_images/{self.transaction_id}.jpg"

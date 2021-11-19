@@ -1,4 +1,4 @@
-from flask import Blueprint, request, render_template, redirect, url_for, abort, flash
+from flask import Blueprint, request, render_template, redirect, url_for, abort
 from main import db, lm
 from models.users import User
 from schemas.user_schema import users_schema, user_schema, user_update_schema
