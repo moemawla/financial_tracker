@@ -9,7 +9,7 @@ class User(UserMixin, db.Model):
     name = db.Column(db.String(100), nullable=False,)
     email = db.Column(db.String(40), unique=True, nullable=False)
     password = db.Column(db.String(200), nullable=False)
-    courses = db.relationship('Transaction', backref="creator")
+    transactions = db.relationship('Transaction', backref="creator", lazy="joined")
     created_on = db.Column(db.DateTime)
     last_login = db.Column(db.DateTime)
 

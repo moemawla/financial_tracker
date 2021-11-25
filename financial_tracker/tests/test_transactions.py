@@ -7,7 +7,7 @@ load_dotenv()
 
 os.environ["FLASK_ENV"]="testing"
 
-class TestCourses(unittest.TestCase):
+class TestTransactions(unittest.TestCase):
     def setUp(self):
         # need to create an app instance to test
         self.app = create_app()
