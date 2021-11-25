@@ -6,6 +6,7 @@ from marshmallow.validate import Length
 class TransactionSchema(ma.SQLAlchemyAutoSchema):
     transaction_id = auto_field(dump_only=True)
     transaction_name = auto_field(required=True, validate=Length(min=1))
+    creator = ma.Nested("UserSchema", only=("id", "name", "email"))
     
     class Meta:
         model = Transaction

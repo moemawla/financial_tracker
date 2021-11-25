@@ -1,4 +1,5 @@
 from flask import Blueprint, request, render_template, redirect, url_for, current_app
+from flask_login import login_required, current_user
 from main import db
 from models.transactions import Transaction
 from schemas.transaction_schema import transactions_schema, transaction_schema
@@ -7,6 +8,7 @@ import boto3
 transactions = Blueprint('transactions', __name__)
 
 @transactions.route("/transactions/", methods=["GET"])
+@login_required
 def get_transactions():
     data = {
         "page_title": "Transaction Index",
@@ -15,6 +17,7 @@ def get_transactions():
     return render_template("transaction_index.html", page_data = data)
 
 @transactions.route("/transactions/<int:id>/", methods = ["GET"])
+@login_required
 def get_transaction(id):
     transaction = Transaction.query.get_or_404(id)
 
@@ -37,14 +40,17 @@ def get_transaction(id):
     return render_template("transaction_detail.html", page_data = data)
 
 @transactions.route("/transactions/", methods=["POST"])
+@login_required
 def create_transaction():
     new_transaction = transaction_schema.load(request.form)
+    new_transaction.creator = current_user
     db.session.add(new_transaction)
     db.session.commit()
     return redirect(f"{url_for('transactions.get_transactions')}/{new_transaction.transaction_id}")
 
 # we are using a POST method for updating because HTML forms do not support PUT/PATCH methods
 @transactions.route("/transactions/<int:id>/update/", methods=["POST"])
+@login_required
 def update_transaction(id):
     transaction = Transaction.query.filter_by(transaction_id=id)
     updated_fields = transaction_schema.dump(request.form)
@@ -55,6 +61,7 @@ def update_transaction(id):
 
 # we are using a POST method for deleting because HTML forms do not support DELETE method
 @transactions.route("/transactions/<int:id>/delete/", methods = ["POST"])
+@login_required
 def delete_transaction(id):
     transaction = Transaction.query.get_or_404(id)
     db.session.delete(transaction)
