@@ -5,8 +5,9 @@
     <p>Transaction ID: {{ page_data.transaction.transaction_id }}</p>
     <br>
     Creator: {{ page_data.transaction.creator.name }} ({{ page_data.transaction.creator.email }})
-
-    <img src= "{{ page_data.image }}" style="width: 250px">
+    {% for image_link in page_data.image_links %}
+        <img src= "{{ image_link }}" style="width: 250px">
+    {% endfor %}
     <br/><br/>
     <h3>Update Transaction Info</h3>
     <form action="/transactions/{{ page_data.transaction.transaction_id }}/update/" method="POST">

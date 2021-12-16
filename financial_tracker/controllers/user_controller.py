@@ -16,47 +16,47 @@ def unauthorized():
 users = Blueprint('users', __name__)
 
 # The GET users endpoint
-@users.route("/users/", methods = ["GET"])
+@users.route('/users/', methods = ['GET'])
 def get_users():
     data = {
-    "page_title": "User Index",
-    "users": users_schema.dump(User.query.all())
+    'page_title': 'User Index',
+    'users': users_schema.dump(User.query.all())
     }
-    return render_template("user_index.html", page_data = data)
+    return render_template('user_index.html', page_data = data)
 
-@users.route("/users/signup/", methods = ["GET", "POST"])
+@users.route('/users/signup/', methods = ['GET', 'POST'])
 def sign_up():
-    data = {"page_title": "Sign Up"}
+    data = {'page_title': 'Sign Up'}
     
-    if request.method == "GET":
-        return render_template("signup.html", page_data = data)
+    if request.method == 'GET':
+        return render_template('signup.html', page_data = data)
     
     new_user = user_schema.load(request.form)
     db.session.add(new_user)
     db.session.commit()
     login_user(new_user)
-    return redirect(url_for("users.get_users"))
+    return redirect(url_for('users.get_users'))
 
-@users.route("/users/login/", methods = ["GET", "POST"])
+@users.route('/users/login/', methods = ['GET', 'POST'])
 def log_in():
-    data = {"page_title": "Log In"}
+    data = {'page_title': 'Log In'}
 
-    if request.method == "GET":
-        return render_template("login.html", page_data = data)
+    if request.method == 'GET':
+        return render_template('login.html', page_data = data)
 
-    user = User.query.filter_by(email = request.form["email"]).first()
-    if user and user.check_password(password = request.form["password"]):
+    user = User.query.filter_by(email = request.form['email']).first()
+    if user and user.check_password(password = request.form['password']):
         login_user(user)
         return redirect(url_for('transactions.get_transactions'))
     
-    abort(401, "Login unsuccessful. Did you supply the correct username and password?")
+    abort(401, 'Login unsuccessful. Did you supply the correct username and password?')
 
-@users.route("/users/account/", methods = ["GET", "POST"])
+@users.route('/users/account/', methods = ['GET', 'POST'])
 @login_required
 def user_detail():
-    if request.method == "GET":
-        data = {"page_title": "Account Details"}
-        return render_template("user_detail.html", page_data = data)
+    if request.method == 'GET':
+        data = {'page_title': 'Account Details'}
+        return render_template('user_detail.html', page_data = data)
     
     user = User.query.filter_by(id = current_user.id)
     updated_fields = user_schema.dump(request.form)
@@ -67,10 +67,10 @@ def user_detail():
 
     user.update(updated_fields)
     db.session.commit()
-    return redirect(url_for("users.get_users"))
+    return redirect(url_for('users.get_users'))
 
-@users.route("/users/logout/", methods = ["POST"])
+@users.route('/users/logout/', methods = ['POST'])
 @login_required
 def log_out():
     logout_user()
-    return redirect(url_for("users.log_in"))
+    return redirect(url_for('users.log_in'))
