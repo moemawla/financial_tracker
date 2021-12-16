@@ -5,23 +5,33 @@
     <p>Transaction ID: {{ page_data.transaction.transaction_id }}</p>
     <br>
     Creator: {{ page_data.transaction.creator.name }} ({{ page_data.transaction.creator.email }})
-    {% for image_link in page_data.image_links %}
-        <img src= "{{ image_link }}" style="width: 250px">
-    {% endfor %}
     <br/><br/>
     <h3>Update Transaction Info</h3>
     <form action="/transactions/{{ page_data.transaction.transaction_id }}/update/" method="POST">
-        <input type="text" name="transaction_name" placeholder="Transaction Name..."/> 
+        <input type="text" name="transaction_name" value="{{ page_data.transaction.transaction_name }}"/>
+        <input type="number" step=".01" name="transaction_amount" value="{{ page_data.transaction.transaction_amount }}">
+        <input type="date" name="transaction_date" value="{{ page_data.transaction.transaction_date }}">
         <button>Update</button>
     </form>
 
     <br/><br/>
 
-    <h3>Update Image:</h3>
-    <form action="/transactions/{{ page_data.transaction.transaction_id }}/image/" method="POST" enctype = "multipart/form-data">
+    <h3>Add Image:</h3>
+    <form action="/images/" method="POST" enctype = "multipart/form-data">
         <input type="file" name="image">
+        <input type="hidden" name="transaction_id" value="{{ page_data.transaction.transaction_id }}">
         <input type="submit">
     </form>
+
+    <br/><br/>
+
+    {% for image in page_data.images %}
+        <img src= "{{ image['link'] }}" style="width: 250px">
+        <form action = "/images/{{ image['id'] }}/delete/", method="POST">
+            <button>Remove Image</button>
+        </form>
+        <br/><br/>
+    {% endfor %}
 
     <br/><br/>
     

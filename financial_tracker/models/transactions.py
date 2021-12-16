@@ -16,11 +16,10 @@ class Transaction(db.Model):
         self.transaction_date = transaction_date
 
     @property
-    def new_image_filename(self):
+    def new_image_file_name(self):
         new_id = 1
         for image in self.images:
             if image.image_id >= new_id:
                 new_id = image.image_id + 1
 
         return f'transaction_images/{self.transaction_id}_{new_id}.jpg'
-

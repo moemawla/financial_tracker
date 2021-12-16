@@ -1,3 +1,4 @@
+from typing import Dict, Tuple
 from flask import Blueprint, request, render_template, redirect, url_for, current_app
 from flask_login import login_required, current_user
 from main import db
@@ -21,7 +22,7 @@ def get_transactions():
 def get_transaction(id):
     transaction = Transaction.query.get_or_404(id)
 
-    images_links = []
+    images = []
 
     for image in transaction.images:
         s3_client=boto3.client('s3')
@@ -34,12 +35,12 @@ def get_transaction(id):
             },
             ExpiresIn=100
         )
-        images_links.append(image_url)
+        images.append({'id': image.image_id, 'link': image_url})
 
     data = {
         'page_title': 'Transaction Detail',
         'transaction': transaction_schema.dump(transaction),
-        'image_links': images_links
+        'images': images
     }
     return render_template('transaction_detail.html', page_data = data)
 
