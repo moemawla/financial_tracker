@@ -72,8 +72,9 @@ def delete_transaction(id):
     db.session.delete(transaction)
     db.session.commit()
 
-    # delete image from S3
-    s3_client=boto3.client('s3')
-    s3_client.delete_object(Bucket = current_app.config['AWS_S3_BUCKET'], Key = transaction.image_filename)
+    # delete images from S3
+    for image in transaction.images:
+        s3_client=boto3.client('s3')
+        s3_client.delete_object(Bucket = current_app.config['AWS_S3_BUCKET'], Key = image.image_file_name)
 
     return redirect(url_for('transactions.get_transactions'))

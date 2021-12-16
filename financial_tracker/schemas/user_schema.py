@@ -11,13 +11,13 @@ class UserSchema(ma.SQLAlchemyAutoSchema):
     password = fields.Method(
         required=True, 
         load_only=True, 
-        deserialize="load_password"
+        deserialize='load_password'
     )
     
     def load_password(self, password):
         if len(password)>6:
             return generate_password_hash(password, method='sha256')
-        raise exceptions.ValidationError("Password must be at least 6 characters.")
+        raise exceptions.ValidationError('Password must be at least 6 characters.')
     
     class Meta:
         model = User

@@ -15,15 +15,6 @@ def unauthorized():
 
 users = Blueprint('users', __name__)
 
-# The GET users endpoint
-@users.route('/users/', methods = ['GET'])
-def get_users():
-    data = {
-    'page_title': 'User Index',
-    'users': users_schema.dump(User.query.all())
-    }
-    return render_template('user_index.html', page_data = data)
-
 @users.route('/users/signup/', methods = ['GET', 'POST'])
 def sign_up():
     data = {'page_title': 'Sign Up'}
