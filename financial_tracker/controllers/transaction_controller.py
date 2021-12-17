@@ -6,6 +6,7 @@ from schemas.transaction_schema import transactions_schema, transaction_schema
 from sqlalchemy import func
 import boto3
 import datetime
+from marshmallow import ValidationError
 
 transactions = Blueprint('transactions', __name__)
 
@@ -69,10 +70,17 @@ def update_transaction(id):
         return abort(403, description='Unauthorized')
     
     # prepare the date from string
-    request_form = dict(request.form)
-    request_form['transaction_date'] = datetime.datetime.strptime(request_form['transaction_date'],'%Y-%m-%d')
+    try:
+        request_form = dict(request.form)
+        request_form['transaction_date'] = datetime.datetime.strptime(request_form['transaction_date'],'%Y-%m-%d')
+        updated_fields = transaction_schema.dump(request_form)
+    except (ValueError):
+        return abort(404, description='Wrong values provided')
 
-    updated_fields = transaction_schema.dump(request_form)
+    errors = transaction_schema.validate(updated_fields)
+    if errors:
+        raise ValidationError(message = errors)
+
     if updated_fields:
         transaction.update(updated_fields)
         db.session.commit()
