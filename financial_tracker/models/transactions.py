@@ -6,8 +6,8 @@ class Transaction(db.Model):
     transaction_id = db.Column(db.Integer, primary_key=True)
     transaction_name = db.Column(db.String(80), nullable=False)
     transaction_amount = db.Column(db.Float, nullable=False)
-    transaction_date = db.Column(db.String(80), nullable=False)
-    creator_id = db.Column(db.Integer, db.ForeignKey('flasklogin-users.id'))
+    transaction_date = db.Column(db.DateTime(), nullable=False)
+    creator_id = db.Column(db.Integer, db.ForeignKey('flasklogin-users.id'), nullable=False)
     images = db.relationship('TransactionImage', cascade="all, delete", backref='transaction', lazy='joined')
     
     def __init__(self, transaction_name, transaction_amount, transaction_date):

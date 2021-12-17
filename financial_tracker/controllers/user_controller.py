@@ -1,7 +1,7 @@
 from flask import Blueprint, request, render_template, redirect, url_for, abort
 from main import db, lm
 from models.users import User
-from schemas.user_schema import users_schema, user_schema, user_update_schema
+from schemas.user_schema import user_schema, user_update_schema
 from flask_login import login_user, logout_user, login_required, current_user
 from marshmallow import ValidationError
 
@@ -26,7 +26,7 @@ def sign_up():
     db.session.add(new_user)
     db.session.commit()
     login_user(new_user)
-    return redirect(url_for('users.get_users'))
+    return redirect(url_for('transactions.get_transactions'))
 
 @users.route('/users/login/', methods = ['GET', 'POST'])
 def log_in():
@@ -58,7 +58,7 @@ def user_detail():
 
     user.update(updated_fields)
     db.session.commit()
-    return redirect(url_for('users.get_users'))
+    return redirect(url_for('transactions.get_transactions'))
 
 @users.route('/users/logout/', methods = ['POST'])
 @login_required
