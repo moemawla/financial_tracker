@@ -1,11 +1,64 @@
 {% extends "base.html" %}
 {% block content %}
+    <h2>Account</h2>
     <div>
         <form action="/users/account/" method="POST">
             <label for="name">Name:</label>
-            <input type="text" name="name" value = {{ current_user.name }}>
+            <br/>
+            <input type="text" name="name" value={{ current_user.name }}>
+            <br/><br/>
             <label for="email">Email:</label>
-            <input type="text" name="email" value = {{ current_user.email }}>
+            <br/>
+            <input type="text" name="email" value={{ current_user.email }}>
+            <br/><br/>
+            <button>Update</button>
+        </form>
+    </div>
+    <br/>
+    <hr/>
+    <h2>Address</h2>
+    <div>
+        <form action="/addresses/" method="POST">
+            <label for="street_address">Street:</label>
+            <br/>
+            <input type="text" name="street_address"
+            {% if page_data.address %}
+                value="{{ page_data.address.street_address }}"
+            {% else %}
+                placeholder="Street Address..."
+            {% endif %}
+            >
+            <br/><br/>
+            <label for="suburb_name">Suburb:</label>
+            <br/>
+            <input type="text" name="suburb_name"
+            {% if page_data.address %}
+                value="{{ page_data.address.suburb_name }}"
+            {% else %}
+                placeholder="Suburb Name..."
+            {% endif %}
+            >
+            <br/><br/>
+            <label for="state_name">State:</label>
+            <br/>
+            <input type="text" name="state_name"
+            {% if page_data.address %}
+                value="{{ page_data.address.state_name }}"
+            {% else %}
+                placeholder="State Name..."
+            {% endif %}
+            >
+            <br/><br/>
+            <label for="country_id">Choose a country:</label>
+            <br/>
+            <select name="country_id">
+                {% for country in page_data.countries %}
+                    <option value="{{ country.id }}" 
+                    {% if page_data.address and page_data.address.country_id == country.id %} selected {% endif %}
+                    >{{ country.name }}</option>
+                {% endfor %}
+            </select>
+            <br/><br/>
             <button>Update</button>
         </form>
     </div>

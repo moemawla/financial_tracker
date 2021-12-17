@@ -1,4 +1,6 @@
 from flask import Blueprint, request, render_template, redirect, url_for, abort
+from models.countries import Country
+from models.addresses import Address
 from main import db, lm
 from models.users import User
 from schemas.user_schema import user_schema, user_update_schema
@@ -46,9 +48,17 @@ def log_in():
 @login_required
 def user_detail():
     if request.method == 'GET':
-        data = {'page_title': 'Account Details'}
+        data = {
+            'page_title': 'Account Details',
+            'countries' : Country.query.all()
+        }
+
+        address = Address.query.filter_by(resident_id=current_user.id).first()
+        if address:
+            data['address'] = address
+
         return render_template('user_detail.html', page_data = data)
-    
+
     user = User.query.filter_by(id = current_user.id)
     updated_fields = user_schema.dump(request.form)
     errors = user_update_schema.validate(updated_fields)
@@ -58,7 +68,7 @@ def user_detail():
 
     user.update(updated_fields)
     db.session.commit()
-    return redirect(url_for('transactions.get_transactions'))
+    return redirect(f"{url_for('users.user_detail')}/")
 
 @users.route('/users/logout/', methods = ['POST'])
 @login_required

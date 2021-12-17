@@ -1,3 +1,5 @@
+from models.addresses import Address
+from models.transactions import Transaction
 from main import db
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -10,6 +12,7 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(40), unique=True, nullable=False)
     password = db.Column(db.String(200), nullable=False)
     transactions = db.relationship('Transaction', backref='creator')
+    address = db.relationship('Address', backref='resident', lazy='joined')
     created_on = db.Column(db.DateTime)
     last_login = db.Column(db.DateTime)
 

@@ -1,12 +1,9 @@
 from flask import Blueprint
 from main import db
+from models.countries import Country
+from countries import country_names
 
 db_commands = Blueprint("db-custom", __name__)
-
-@db_commands.cli.command("create")
-def create_db():
-    db.create_all()
-    print("Tables created!")
 
 @db_commands.cli.command("drop")
 def drop_db():
@@ -14,15 +11,10 @@ def drop_db():
     db.engine.execute("DROP TABLE IF EXISTS alembic_version;")
     print("Tables deleted")
 
-@db_commands.cli.command("seed")
-def seed_db():
-    from models.transactions import Transaction
-    from faker import Faker
-    faker = Faker()
-
-    for i in range(20):
-        transaction = Transaction(faker.catch_phrase())
-        db.session.add(transaction)
-    
+@db_commands.cli.command("init")
+def init_db():
+    for country_name in country_names:
+        country = Country(country_name)
+        db.session.add(country)
     db.session.commit()
-    print("Tables seeded")
+    print("Table countries populated")
