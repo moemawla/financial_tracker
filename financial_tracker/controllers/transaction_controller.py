@@ -4,6 +4,7 @@ from flask_login import login_required, current_user
 from main import db
 from models.transactions import Transaction
 from schemas.transaction_schema import transactions_schema, transaction_schema
+from sqlalchemy import func
 import boto3
 
 transactions = Blueprint('transactions', __name__)
@@ -11,8 +12,10 @@ transactions = Blueprint('transactions', __name__)
 @transactions.route('/transactions/', methods=['GET'])
 @login_required
 def get_transactions():
+    balance = db.session.query(func.sum(Transaction.transaction_amount)).filter(Transaction.creator_id==current_user.id).scalar()
     data = {
         'page_title': 'Transaction Index',
+        'balance' : balance,
         'transactions': transactions_schema.dump(Transaction.query.all())
     }
     return render_template('transaction_index.html', page_data = data)
