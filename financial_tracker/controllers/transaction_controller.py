@@ -1,11 +1,11 @@
-from typing import Dict, Tuple
-from flask import Blueprint, request, render_template, redirect, url_for, current_app
+from flask import Blueprint, request, render_template, redirect, abort, url_for, current_app
 from flask_login import login_required, current_user
 from main import db
 from models.transactions import Transaction
 from schemas.transaction_schema import transactions_schema, transaction_schema
 from sqlalchemy import func
 import boto3
+import datetime
 
 transactions = Blueprint('transactions', __name__)
 
@@ -16,7 +16,7 @@ def get_transactions():
     data = {
         'page_title': 'Transaction Index',
         'balance' : balance,
-        'transactions': transactions_schema.dump(Transaction.query.all())
+        'transactions': transactions_schema.dump(Transaction.query.filter_by(creator_id=current_user.id))
     }
     return render_template('transaction_index.html', page_data = data)
 
@@ -24,6 +24,9 @@ def get_transactions():
 @login_required
 def get_transaction(id):
     transaction = Transaction.query.get_or_404(id)
+
+    if transaction.creator != current_user:
+        return abort(403, description='Unauthorized')
 
     images = []
 
@@ -61,7 +64,15 @@ def create_transaction():
 @login_required
 def update_transaction(id):
     transaction = Transaction.query.filter_by(transaction_id=id)
-    updated_fields = transaction_schema.dump(request.form)
+    
+    if transaction.first().creator != current_user:
+        return abort(403, description='Unauthorized')
+    
+    # prepare the date from string
+    request_form = dict(request.form)
+    request_form['transaction_date'] = datetime.datetime.strptime(request_form['transaction_date'],'%Y-%m-%d')
+
+    updated_fields = transaction_schema.dump(request_form)
     if updated_fields:
         transaction.update(updated_fields)
         db.session.commit()
@@ -72,6 +83,10 @@ def update_transaction(id):
 @login_required
 def delete_transaction(id):
     transaction = Transaction.query.get_or_404(id)
+
+    if transaction.creator != current_user:
+        return abort(403, description='Unauthorized')
+
     db.session.delete(transaction)
     db.session.commit()
 

@@ -1,4 +1,5 @@
 from flask import Blueprint, request, redirect, abort, url_for, current_app
+from flask_login import login_required, current_user
 from pathlib import Path
 from models.transactions import Transaction
 from models.transaction_images import TransactionImage
@@ -8,11 +9,14 @@ import boto3
 transaction_images = Blueprint('transaction_images', __name__)
 
 @transaction_images.route('/images/', methods = ['POST'])
+@login_required
 def add_image():
     transaction_id = request.form['transaction_id']
     transaction = Transaction.query.get(transaction_id)
     if not transaction:
         abort(400, description='Invalid transaction id')
+    if transaction.creator != current_user:
+        return abort(403, description='Unauthorized')
     if 'image' in request.files:
         image = request.files['image']
         if Path(image.filename).suffix != '.jpg':
@@ -30,9 +34,15 @@ def add_image():
     return abort(400, description='No image')
 
 @transaction_images.route('/images/<int:image_id>/delete/', methods = ['DELETE', 'POST'])
+@login_required
 def remove_image(image_id):
     image = TransactionImage.query.get_or_404(image_id)
+
+    if image.transaction.creator != current_user:
+        return abort(403, description='Unauthorized')
+
     transaction_id = image.transaction.transaction_id
+
     db.session.delete(image)
     db.session.commit()
 
