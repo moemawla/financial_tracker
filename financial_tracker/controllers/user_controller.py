@@ -1,4 +1,5 @@
 from flask import Blueprint, request, render_template, redirect, url_for, abort
+from sqlalchemy.sql.expression import desc
 from models.countries import Country
 from models.addresses import Address
 from main import db, lm
@@ -50,7 +51,7 @@ def user_detail():
     if request.method == 'GET':
         data = {
             'page_title': 'Account Details',
-            'countries' : Country.query.all()
+            'countries' : Country.query.filter_by(active=True).order_by(Country.name).all()
         }
 
         address = Address.query.filter_by(resident_id=current_user.id).first()

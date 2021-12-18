@@ -30,7 +30,7 @@ def drop_db():
 @db_commands.cli.command("init")
 def init_db():
     for country_name in country_names:
-        country = Country(country_name)
+        country = Country(country_name, True)
         db.session.add(country)
     db.session.commit()
     print("Table countries populated")

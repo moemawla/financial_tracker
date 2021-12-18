@@ -5,7 +5,8 @@ from marshmallow.validate import Length
 
 class CountrySchema(ma.SQLAlchemyAutoSchema):
     id = auto_field(dump_only=True)
-    name = auto_field(required=True, validate=Length(min=1))
+    name = auto_field(dump_only=True)
+    active = auto_field(dump_only=True)
     
     class Meta:
         model = Country

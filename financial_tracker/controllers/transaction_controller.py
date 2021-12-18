@@ -21,6 +21,11 @@ def get_transactions():
     }
     return render_template('transaction_index.html', page_data = data)
 
+@transactions.route('/', methods=['GET'])
+@login_required
+def index():
+    return redirect(f"{url_for('transactions.get_transactions')}")
+
 @transactions.route('/transactions/<int:id>/', methods = ['GET'])
 @login_required
 def get_transaction(id):
