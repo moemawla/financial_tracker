@@ -29,7 +29,7 @@ You need the following:
     4- Create a S3 bucket on AWS and create an IAM user that has programatic access to this bucket with permissions to read, write and delete objects from the bucket.
     5- Set the bucket name and credentials in ".env" file.
     6- run the script "install.sh" which will create the virtual environment, install dependencies, create the database tables and initialize the needed data.
-    7- Run the following command to fire up the flask web server: "cd financial_tracker & flask run"
+    7- Run the following command to fire up the flask web server: "source venv/bin/activate && cd financial_tracker && flask run"
 
 
 ## Pages and functionalities
