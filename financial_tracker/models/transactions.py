@@ -1,4 +1,5 @@
 from main import db
+import uuid
 from models.transaction_images import TransactionImage
 
 class Transaction(db.Model):
@@ -17,9 +18,4 @@ class Transaction(db.Model):
 
     @property
     def new_image_file_name(self):
-        new_id = 1
-        for image in self.images:
-            if image.id >= new_id:
-                new_id = image.id + 1
-
-        return f'transaction_images/{self.id}_{new_id}.jpg'
+        return f'transaction_images/{uuid.uuid4()}.jpg'

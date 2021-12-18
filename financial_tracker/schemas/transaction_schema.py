@@ -17,3 +17,4 @@ class TransactionSchema(ma.SQLAlchemyAutoSchema):
         
 transaction_schema = TransactionSchema()
 transactions_schema = TransactionSchema(many=True)
+transaction_update_schema = TransactionSchema(partial=True)

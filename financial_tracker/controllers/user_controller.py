@@ -26,6 +26,11 @@ def sign_up():
         return render_template('signup.html', page_data = data)
     
     new_user = user_schema.load(request.form)
+
+    existing_user = User.query.filter_by(email = new_user.email).first()
+    if existing_user:
+        abort(409, 'An account with the provided email already exists')
+
     db.session.add(new_user)
     db.session.commit()
     login_user(new_user)
@@ -66,6 +71,10 @@ def user_detail():
     
     if errors:
         raise ValidationError(message = errors)
+
+    existing_user = User.query.filter_by(email = updated_fields['email']).first()
+    if existing_user and existing_user.id != current_user.id:
+        abort(409, 'The provided email is used by a different account')
 
     user.update(updated_fields)
     db.session.commit()

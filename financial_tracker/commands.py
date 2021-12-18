@@ -46,9 +46,9 @@ def dump_db():
     ]
 
     for data in dump_data:
-        dump(*data)
+        dump_to_file(*data)
 
-def dump(model, schema, file_path):
+def dump_to_file(model, schema, file_path):
     entities = db.session.query(model).all()
     data = schema.dump(entities)
     try:

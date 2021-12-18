@@ -2,7 +2,7 @@ from flask import Blueprint, request, render_template, redirect, abort, url_for,
 from flask_login import login_required, current_user
 from main import db
 from models.transactions import Transaction
-from schemas.transaction_schema import transactions_schema, transaction_schema
+from schemas.transaction_schema import transactions_schema, transaction_schema, transaction_update_schema
 from sqlalchemy import func
 import boto3
 import datetime
@@ -16,8 +16,8 @@ def get_transactions():
     balance = db.session.query(func.sum(Transaction.amount)).filter(Transaction.creator_id==current_user.id).scalar()
     data = {
         'page_title': 'Transaction Index',
-        'balance' : balance,
-        'transactions': transactions_schema.dump(Transaction.query.filter_by(creator_id=current_user.id))
+        'balance' : balance if balance else 0.0,
+        'transactions': transactions_schema.dump(Transaction.query.filter_by(creator_id=current_user.id).order_by(Transaction.date))
     }
     return render_template('transaction_index.html', page_data = data)
 
@@ -32,7 +32,7 @@ def get_transaction(id):
     transaction = Transaction.query.get_or_404(id)
 
     if transaction.creator != current_user:
-        return abort(403, description='Unauthorized')
+        return abort(401, description='Unauthorized')
 
     images = []
 
@@ -72,24 +72,28 @@ def update_transaction(id):
     transaction = Transaction.query.filter_by(id=id)
     
     if transaction.first().creator != current_user:
-        return abort(403, description='Unauthorized')
+        return abort(401, description='Unauthorized')
     
+    request_form = dict(request.form)
     # prepare the date from string
     try:
-        request_form = dict(request.form)
         request_form['date'] = datetime.datetime.strptime(request_form['date'],'%Y-%m-%d')
-        updated_fields = transaction_schema.dump(request_form)
     except (ValueError):
-        return abort(404, description='Wrong values provided')
+        return abort(404, description='Wrong date provided')
 
-    errors = transaction_schema.validate(updated_fields)
+    if not request_form['amount']:
+        return abort(404, description='Amount can\'t be empty')
+
+    updated_fields = transaction_schema.dump(request_form)
+
+    errors = transaction_update_schema.validate(updated_fields)
     if errors:
         raise ValidationError(message = errors)
 
     if updated_fields:
         transaction.update(updated_fields)
         db.session.commit()
-    return redirect(f"{url_for('transactions.get_transactions')}/{transaction.first().id}")
+    return redirect(f"{url_for('transactions.get_transactions')}/{id}")
 
 # we are using a POST method for deleting because HTML forms do not support DELETE method
 @transactions.route('/transactions/<int:id>/delete/', methods = ['POST'])
@@ -98,7 +102,7 @@ def delete_transaction(id):
     transaction = Transaction.query.get_or_404(id)
 
     if transaction.creator != current_user:
-        return abort(403, description='Unauthorized')
+        return abort(401, description='Unauthorized')
 
     db.session.delete(transaction)
     db.session.commit()

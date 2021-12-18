@@ -16,7 +16,7 @@ def add_image():
     if not transaction:
         abort(400, description='Invalid transaction id')
     if transaction.creator != current_user:
-        return abort(403, description='Unauthorized')
+        return abort(401, description='Unauthorized')
     if 'image' in request.files:
         image = request.files['image']
         if Path(image.filename).suffix != '.jpg':
@@ -39,7 +39,7 @@ def remove_image(id):
     image = TransactionImage.query.get_or_404(id)
 
     if image.transaction.creator != current_user:
-        return abort(403, description='Unauthorized')
+        return abort(401, description='Unauthorized')
 
     transaction_id = image.transaction.id
 
