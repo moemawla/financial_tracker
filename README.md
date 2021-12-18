@@ -112,3 +112,8 @@ Field validations for address details:
 
 <br/>
 
+## Entity relationship diagram
+
+![entity relationship diagram](./docs/erd.jpg)
+
+<br/>
