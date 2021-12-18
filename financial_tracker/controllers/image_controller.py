@@ -19,7 +19,7 @@ def add_image():
         return abort(401, description='Unauthorized')
     if 'image' in request.files:
         image = request.files['image']
-        if Path(image.filename).suffix != '.jpg':
+        if Path(image.filename).suffix not in ['.jpg', '.jpeg', '.png']:
             return abort(400, description='Invalid file type')
         image_file_name = transaction.new_image_file_name
         bucket = boto3.resource('s3').Bucket(current_app.config['AWS_S3_BUCKET'])

@@ -9,9 +9,18 @@
         <h2>New Transaction</h2>
         <div>
             <form action="/transactions/" method="POST">
+                <label for="name">Name:</label>
+                <br/>
                 <input type="text" name="name" placeholder="Transaction Name...">
+                <br/><br/>
+                <label for="amount">Amount: (negative number for credit and positive for debit)</label>
+                <br/>
                 <input type="number" step=".01" name="amount" placeholder="Transaction Amount...">
+                <br/><br/>
+                <label for="date">Date: (when the transaction was made)</label>
+                <br/>
                 <input type="date" name="date" placeholder="Transaction Date...">
+                <br/><br/>
                 <button>Create</button>
             </form>
         </div>
