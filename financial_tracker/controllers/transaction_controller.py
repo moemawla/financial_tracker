@@ -13,7 +13,7 @@ transactions = Blueprint('transactions', __name__)
 @transactions.route('/transactions/', methods=['GET'])
 @login_required
 def get_transactions():
-    balance = db.session.query(func.sum(Transaction.transaction_amount)).filter(Transaction.creator_id==current_user.id).scalar()
+    balance = db.session.query(func.sum(Transaction.amount)).filter(Transaction.creator_id==current_user.id).scalar()
     data = {
         'page_title': 'Transaction Index',
         'balance' : balance,
@@ -38,11 +38,11 @@ def get_transaction(id):
             'get_object',
             Params={
                 'Bucket': bucket_name,
-                'Key': image.image_file_name
+                'Key': image.file_name
             },
             ExpiresIn=100
         )
-        images.append({'id': image.image_id, 'link': image_url})
+        images.append({'id': image.id, 'link': image_url})
 
     data = {
         'page_title': 'Transaction Detail',
@@ -58,13 +58,13 @@ def create_transaction():
     new_transaction.creator = current_user
     db.session.add(new_transaction)
     db.session.commit()
-    return redirect(f"{url_for('transactions.get_transactions')}/{new_transaction.transaction_id}")
+    return redirect(f"{url_for('transactions.get_transactions')}/{new_transaction.id}")
 
 # we are using a POST method for updating because HTML forms do not support PUT/PATCH methods
 @transactions.route('/transactions/<int:id>/update/', methods=['POST'])
 @login_required
 def update_transaction(id):
-    transaction = Transaction.query.filter_by(transaction_id=id)
+    transaction = Transaction.query.filter_by(id=id)
     
     if transaction.first().creator != current_user:
         return abort(403, description='Unauthorized')
@@ -72,7 +72,7 @@ def update_transaction(id):
     # prepare the date from string
     try:
         request_form = dict(request.form)
-        request_form['transaction_date'] = datetime.datetime.strptime(request_form['transaction_date'],'%Y-%m-%d')
+        request_form['date'] = datetime.datetime.strptime(request_form['date'],'%Y-%m-%d')
         updated_fields = transaction_schema.dump(request_form)
     except (ValueError):
         return abort(404, description='Wrong values provided')
@@ -84,7 +84,7 @@ def update_transaction(id):
     if updated_fields:
         transaction.update(updated_fields)
         db.session.commit()
-    return redirect(f"{url_for('transactions.get_transactions')}/{transaction.first().transaction_id}")
+    return redirect(f"{url_for('transactions.get_transactions')}/{transaction.first().id}")
 
 # we are using a POST method for deleting because HTML forms do not support DELETE method
 @transactions.route('/transactions/<int:id>/delete/', methods = ['POST'])
@@ -101,6 +101,6 @@ def delete_transaction(id):
     # delete images from S3
     for image in transaction.images:
         s3_client=boto3.client('s3')
-        s3_client.delete_object(Bucket = current_app.config['AWS_S3_BUCKET'], Key = image.image_file_name)
+        s3_client.delete_object(Bucket = current_app.config['AWS_S3_BUCKET'], Key = image.file_name)
 
     return redirect(url_for('transactions.get_transactions'))

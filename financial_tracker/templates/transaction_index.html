@@ -9,9 +9,9 @@
         <h2>New Transaction</h2>
         <div>
             <form action="/transactions/" method="POST">
-                <input type="text" name="transaction_name" placeholder="Transaction Name...">
-                <input type="number" step=".01" name="transaction_amount" placeholder="Transaction Amount...">
-                <input type="date" name="transaction_date" placeholder="Transaction Date...">
+                <input type="text" name="name" placeholder="Transaction Name...">
+                <input type="number" step=".01" name="amount" placeholder="Transaction Amount...">
+                <input type="date" name="date" placeholder="Transaction Date...">
                 <button>Create</button>
             </form>
         </div>
@@ -19,7 +19,7 @@
     <hr/>
     <h2>Transaction List</h2>
     {% for transaction in page_data.transactions %}
-        <a href="/transactions/{{ transaction.transaction_id }}/">{{ transaction.transaction_name }}</a><br/>
+        <a href="/transactions/{{ transaction.id }}/">{{ transaction.name }}</a><br/>
     {% endfor %}
     <hr/>
 {% endblock %}

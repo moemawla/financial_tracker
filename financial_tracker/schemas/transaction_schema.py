@@ -5,10 +5,10 @@ from marshmallow_sqlalchemy import auto_field
 from marshmallow.validate import Length
 
 class TransactionSchema(ma.SQLAlchemyAutoSchema):
-    transaction_id = auto_field(dump_only=True)
-    transaction_name = auto_field(required=True, validate=Length(min=1))
-    transaction_amount = fields.Number(required=True)
-    transaction_date = fields.Date(required=True)
+    id = auto_field(dump_only=True)
+    name = auto_field(required=True, validate=Length(min=1))
+    amount = fields.Number(required=True)
+    date = fields.Date(required=True)
     creator_id = auto_field(dump_only=True)
     
     class Meta:

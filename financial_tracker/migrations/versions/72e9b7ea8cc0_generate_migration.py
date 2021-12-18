@@ -46,20 +46,20 @@ def upgrade():
     sa.UniqueConstraint('resident_id')
     )
     op.create_table('transactions',
-    sa.Column('transaction_id', sa.Integer(), nullable=False),
-    sa.Column('transaction_name', sa.String(length=80), nullable=False),
-    sa.Column('transaction_amount', sa.Float(), nullable=False),
-    sa.Column('transaction_date', sa.DateTime(), nullable=False),
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('name', sa.String(length=80), nullable=False),
+    sa.Column('amount', sa.Float(), nullable=False),
+    sa.Column('date', sa.DateTime(), nullable=False),
     sa.Column('creator_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['creator_id'], ['flasklogin-users.id'], ),
-    sa.PrimaryKeyConstraint('transaction_id')
+    sa.PrimaryKeyConstraint('id')
     )
     op.create_table('transaction-images',
-    sa.Column('image_id', sa.Integer(), nullable=False),
-    sa.Column('image_file_name', sa.String(length=80), nullable=False),
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('file_name', sa.String(length=80), nullable=False),
     sa.Column('transaction_id', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['transaction_id'], ['transactions.transaction_id'], ),
-    sa.PrimaryKeyConstraint('image_id')
+    sa.ForeignKeyConstraint(['transaction_id'], ['transactions.id'], ),
+    sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###
 

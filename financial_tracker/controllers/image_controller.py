@@ -33,20 +33,20 @@ def add_image():
         return redirect(url_for('transactions.get_transaction', id = transaction_id))
     return abort(400, description='No image')
 
-@transaction_images.route('/images/<int:image_id>/delete/', methods = ['DELETE', 'POST'])
+@transaction_images.route('/images/<int:id>/delete/', methods = ['DELETE', 'POST'])
 @login_required
-def remove_image(image_id):
-    image = TransactionImage.query.get_or_404(image_id)
+def remove_image(id):
+    image = TransactionImage.query.get_or_404(id)
 
     if image.transaction.creator != current_user:
         return abort(403, description='Unauthorized')
 
-    transaction_id = image.transaction.transaction_id
+    transaction_id = image.transaction.id
 
     db.session.delete(image)
     db.session.commit()
 
     # delete image from S3
     s3_client=boto3.client('s3')
-    s3_client.delete_object(Bucket = current_app.config['AWS_S3_BUCKET'], Key = image.image_file_name)
+    s3_client.delete_object(Bucket = current_app.config['AWS_S3_BUCKET'], Key = image.file_name)
     return redirect(url_for('transactions.get_transaction', id = transaction_id))
