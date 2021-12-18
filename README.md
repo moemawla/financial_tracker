@@ -2,25 +2,36 @@
 
 ## Overview
 
-The application is a web-based financial tracker. The users can manage their income and expenses through the application to track their financials and make better decisions. 
+This application is a web-based financial tracker. The users can manage their income and expenses through the application to track their financials and make better decisions. 
 
-Users will be able to perform the following:
+Users are able to perform the following:
 - sign-up.
 - login/logout.
-- edit profile and upload a profile picture.
-- add/remove currencies.
-- manage income/expense records (create, view, update, delete).
-- view total balance (per currency).
-- view balance over a certain period (per currency).
-- exchange amount from one currency to another by providing an exchange rate (will remove the amount from the first currency and add the equivalent to the second currency).
+- edit profile and add/update address.
+- manage income/expense transactions (create, view, update, delete).
+- add/remove multiple supporting images for each transaction.
+- view total balance and list of all transactions ordered by date.
 
-The Trello board for managing the implementation of the application is found here https://trello.com/b/kQt5HOLb/financial-tracker
+
+## Requirements
+
+You need the following:
+- Python3 must be installed.
+- Pip3 must be installed.
+- PostgreSQL must be installed.
+
 
 ## Installation steps
 
-    1- Make sure you have Python3, pip3 and virtualenv installed.
-    2- Clone the project from the Git repository (git clone https://github.com/moemawla/financial_tracker.git)
-    3- Go into the project folder (cd financial_tracker)
-    4- Create the virtual environment (virtualenv venv)
-    5- Activate the virtual environment (source venv/bin/activate)
-    6- Install the project requirements inside the the virtual environment (pip3 install -r requirements.txt)
+    1- Copy ".env.dist" to ".env" file.
+    2- Make sure you have a new database created in PostgreSQL with a user that has full access to it.
+    3- Set the database name, user and password in ".env" file.
+    4- Create a S3 bucket on AWS and create an IAM user that has programatic access to this bucket with permissions to read, write and delete objects from the bucket.
+    5- Set the bucket name and credentials in ".env" file.
+    6- run the script "install.sh" which will create the virtual environment, install dependencies, create the database tables and initialize the needed data.
+    7- Run the following command to fire up the flask web server: "cd financial_tracker & flask run"
+
+
+## Pages and functionalities
+
+
