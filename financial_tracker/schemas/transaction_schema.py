@@ -9,7 +9,7 @@ class TransactionSchema(ma.SQLAlchemyAutoSchema):
     transaction_name = auto_field(required=True, validate=Length(min=1))
     transaction_amount = fields.Number(required=True)
     transaction_date = fields.Date(required=True)
-    creator = ma.Nested('UserSchema', only=('id', 'name', 'email'))
+    creator_id = auto_field(dump_only=True)
     
     class Meta:
         model = Transaction

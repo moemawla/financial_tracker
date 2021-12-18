@@ -24,4 +24,5 @@ class UserSchema(ma.SQLAlchemyAutoSchema):
         load_instance = True
 
 user_schema = UserSchema()
+users_schema = UserSchema(many=True)
 user_update_schema = UserSchema(partial=True)
