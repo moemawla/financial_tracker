@@ -73,22 +73,10 @@ def update_transaction(id):
     
     if transaction.first().creator != current_user:
         return abort(401, description='Unauthorized')
-    
-    request_form = dict(request.form)
-    # prepare the date from string
-    try:
-        request_form['date'] = datetime.datetime.strptime(request_form['date'],'%Y-%m-%d')
-    except (ValueError):
-        return abort(404, description='Wrong date provided')
 
-    if not request_form['amount']:
-        return abort(404, description='Amount can\'t be empty')
-
-    updated_fields = transaction_schema.dump(request_form)
-
-    errors = transaction_update_schema.validate(updated_fields)
-    if errors:
-        raise ValidationError(message = errors)
+    updated_fields = transaction_update_schema.dump(
+        transaction_schema.load(request.form)
+        )
 
     if updated_fields:
         transaction.update(updated_fields)
