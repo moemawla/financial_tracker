@@ -20,20 +20,8 @@ then
     exit 1
 fi
 
-# check and install virtualenv
-version="$(virtualenv --version 2>&1)"
-if [[ $version != "virtualenv"* ]]
-then
-    pip3 install virtualenv
-fi
-
 # get the absolute path to the directory containing this script
 dir_path=$(dirname $(realpath $0))
-
-# create and activate the virtual environment
-rm -rf $dir_path/venv
-virtualenv $dir_path/venv
-source $dir_path/venv/bin/activate
 
 # install requirements
 pip3 install -r $dir_path/requirements.txt
