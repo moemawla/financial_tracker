@@ -1,0 +1,12 @@
+[Unit]
+Description=Gunicorn instance for my financial_tracker flask app
+After=network.target
+[Service]
+User=ubuntu
+Group=www-data
+WorkingDirectory=/home/ubuntu/financial-tracker-deployed/financial_tracker
+ExecStart=gunicorn -b localhost:8000 "main:create_app()"
+EnvironmentFile=/home/ubuntu/financial-tracker-deployed/.env
+Restart=always
+[Install]
+WantedBy=multi-user.target
