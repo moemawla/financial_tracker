@@ -18,20 +18,19 @@ Users are able to perform the following:
 
 You need the following:
 - Python3 must be installed.
-- Pip3 must be installed.
-- PostgreSQL must be installed.
+- PostgreSQL database created and accessible.
 
 <br/>
 
 ## Installation steps
 
     1- Copy ".env.dist" to ".env" file.
-    2- Make sure you have a new database created in PostgreSQL with a user that has full access to it.
+    2- Make sure you have a PostgreSQL database created with a user that has full access to it.
     3- Set the database name, user and password in ".env" file.
     4- Create a S3 bucket on AWS and create an IAM user that has programatic access to this bucket with permissions to read, write and delete objects from the bucket.
     5- Set the bucket name and credentials in ".env" file.
-    6- run the script "install.sh" which will create the virtual environment, install dependencies, create the database tables and initialize the needed data.
-    7- Run the following command to fire up the flask web server: "source venv/bin/activate && cd financial_tracker && flask run"
+    6- run the script "install.sh" which will install dependencies and setup the web servers.
+    7- run the script "create_database.sh" which will create the database tables and initialize the needed data.
 
 <br/>
 
