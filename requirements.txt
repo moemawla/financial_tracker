@@ -2,7 +2,7 @@ alembic==1.7.5
 boto3==1.20.8
 botocore==1.23.9
 click==8.0.3
-dataclasses==0.8
+dataclasses==0.6
 Flask==2.0.2
 Flask-Login==0.5.0
 flask-marshmallow==0.14.0
@@ -29,3 +29,4 @@ typing-extensions==3.10.0.2
 urllib3==1.26.7
 Werkzeug==2.0.2
 zipp==3.6.0
+gunicorn==20.0.4
