@@ -36,15 +36,4 @@ sudo systemctl enable nginx
 sudo cp $dir_path/nginx.config /etc/nginx/sites-available/default
 sudo systemctl restart nginx
 
-# drop database tables
-cd financial_tracker/
-flask db-custom drop
-
-# upgrade and initialize database
-flask db upgrade
-flask db-custom init
-
-# create directory for database dumps
-mkdir database_dumps
-
 exit 0
