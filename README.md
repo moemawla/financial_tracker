@@ -26,7 +26,7 @@ You need the following:
 
     1- Copy ".env.dist" to ".env" file.
     2- Make sure you have a PostgreSQL database created with a user that has full access to it.
-    3- Set the database name, user and password in ".env" file.
+    3- Set the database domain, name, user and password in ".env" file.
     4- Create a S3 bucket on AWS and create an IAM user that has programatic access to this bucket with permissions to read, write and delete objects from the bucket.
     5- Set the bucket name and credentials in ".env" file.
     6- run the script "install.sh" which will install dependencies and setup the web servers.
@@ -126,9 +126,3 @@ Field validations for address details:
 - Privacy regarding images: First of all the images that users attach to transactions are saved to the cloud with random names following the "UUID version 4" format. In addition, even though the images are accessed through web links returned in the HTML pages, the links are not permanent. Every time an image needs to be displayed to a user the application will securely communicate with the cloud platform to create a short-lived link to the image that expires after a certain time. This way the application can guarantee that no one can try brute-forcing names/links to access the images.
 
 - Preventing SQL injection: The application relies on the "SQLAlchemy" ORM package to perform requests to the database. The biggest importance of using an ORM is that the database requests are sanitized to prevent possible SQL injection attacks.
-
-<br/>
-
-## Professional, ethical and legal obligations
-
-The deployment and the ongoing support of the financial tracker website is subject to professional, legal and ethical obligations. Some customers may solely depend on the use of the financial tracker website to keep track of all their expenses and receipts, some of which they may need for tax purposes. Therefore, the owners of the financial tracker website have a professional obligation to act with due care and skill which is also enforceable by the Australian Consumer Law (Consumer Affairs Australia). The technology stack used in the website must be reliable and updated to maintain the highest professional standards in running a functional website. Customers must be warned if any services they depend on will no longer be available so that they can migrate important information such as proof of transactions they need for taxation purposes. Moreover, the information of customers should be handled carefully with the right security measures taken and trustable, reliable cloud providers used to prevent the leak of users’ information to unwanted sources (hackers or enemy states). The financial tracker website is bound by The Privacy Act 1988 which is in place to ensure the protection of customers' personal information. The information of customers must not be abused for marketing purposes and users must be notified and asked for consent for their information to be used for marketing and market research.
