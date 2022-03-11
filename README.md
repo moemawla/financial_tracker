@@ -22,15 +22,28 @@ You need the following:
 
 <br/>
 
-## Installation steps
+## Installation steps (local linux)
+
+    1- Copy ".env.dist" to ".env" file.
+    2- Make sure you have a PostgreSQL database created with a user that has full access to it.
+    3- Set the database name, user and password in ".env" file.
+    4- Create a S3 bucket on AWS and create an IAM user that has programatic access to this bucket with permissions to read, write and delete objects from the bucket.
+    5- Set the bucket name and credentials in ".env" file.
+    6- Run the script "install_local.sh" which will create the virtual environment and install dependencies.
+    7- Run the script "create_database.sh" which will create the database tables and initialize the needed data.
+    7- Run the following command to fire up the flask web server: "source venv/bin/activate && cd financial_tracker && flask run"
+
+<br/>
+
+## Installation steps (AWS EC2 Ubuntu)
 
     1- Copy ".env.dist" to ".env" file.
     2- Make sure you have a PostgreSQL database created with a user that has full access to it.
     3- Set the database domain, name, user and password in ".env" file.
     4- Create a S3 bucket on AWS and create an IAM user that has programatic access to this bucket with permissions to read, write and delete objects from the bucket.
     5- Set the bucket name and credentials in ".env" file.
-    6- run the script "install.sh" which will install dependencies and setup the web servers.
-    7- run the script "create_database.sh" which will create the database tables and initialize the needed data.
+    6- Run the script "install_ec2.sh" which will install dependencies and setup the web servers.
+    7- Run the script "create_database.sh" which will create the database tables and initialize the needed data.
 
 <br/>
 

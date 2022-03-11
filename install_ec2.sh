@@ -23,7 +23,6 @@ dir_path=$(dirname $(realpath $0))
 # install requirements
 sudo pip3 install -r $dir_path/requirements.txt
 
-
 # setup gunicorn process
 sudo cp $dir_path/financial_tracker_app.service /etc/systemd/system/financial_tracker_app.service
 sudo systemctl daemon-reload
